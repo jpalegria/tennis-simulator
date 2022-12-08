@@ -1,7 +1,8 @@
 # For more information: https://laravel.com/docs/sail
 version: '3'
 services:
-    laravel.test:
+    laravel-tennis-sim:
+        container_name: tennis_sim_laravel
         build:
             context: ./vendor/laravel/sail/runtimes/8.1
             dockerfile: Dockerfile
@@ -23,11 +24,12 @@ services:
         networks:
             - sail
         depends_on:
-            - mariadb
-    mariadb:
+            - mariadb-tennis-sim
+    mariadb-tennis-sim: #DB_HOST .env
+        container_name: tennis_sim_mariadb
         image: 'mariadb:10'
         ports:
-            - '${FORWARD_DB_PORT:-3306}:3306'
+            - '${FORWARD_DB_PORT:-33060}:3306'
         environment:
             MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
             MYSQL_ROOT_HOST: "%"
