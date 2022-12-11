@@ -96,7 +96,7 @@ class TournamentController extends Controller
     public function store(Request $request)
     {
         try{
-            $validation = $this->validateDtoTournament($request);
+            $validation = $this->validateDtoCreateTournament($request);
 
             if ($validation->fails()) {
                 $errors = $validation->getMessageBag()->all();
@@ -184,13 +184,43 @@ class TournamentController extends Controller
     }
 
     /**
-     * Validate data request for a torunament. 
+     * Display a listing of the filtered resource.
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function filter(Request $request){
+        try {
+            $validation = $this->validateDtoFilterTournament($request);
+
+            if ($validation->fails()) {
+                $errors = $validation->getMessageBag()->all();
+                $errorResponse = new HttpResponse422();
+                $errorResponse->setMessage($errors);
+
+                return response()->json($errorResponse->parse(), $errorResponse->getCode());
+            }
+
+            $dataValidated = $validation->validated();
+            $tournamentsFounded = $this->tournamentService->readWithFilters($dataValidated);
+
+            return response()->json($tournamentsFounded);
+
+        }
+        catch(\Throwable $error){
+            error_log($error);
+            $errorResponse = new HttpResponse500();
+            return response()->json($errorResponse->parse(), $errorResponse->getCode());
+        }
+    }
+
+    /**
+     * Validate data request to creation for a tournament. 
      * Ex.: { "name":"MAROLIO'S TENNIS CUP", "players": [1,3,5,10], "genre":"male", "simulate": true }
      * 
      * @param Request $request
      * @return \Illuminate\Contracts\Validation\Validator|\Illuminate\Validation\Validator
      */
-    protected function validateDtoTournament(Request $request){
+    protected function validateDtoCreateTournament(Request $request){
         return Validator::make(
             $request->all(),
             [
@@ -198,6 +228,26 @@ class TournamentController extends Controller
                 'players' => 'required|array|exists:players,id',
                 'genre' => ['required', Rule::in(['female', 'male'])],
                 'simulate' => 'required|bool'
+            ]
+        );
+    }
+
+    /**
+     * Validate data request to filter for a tournament. 
+     * Ex.: { "name":"MAROLIO'S TENNIS CUP", "players": [1,3,5,10], "genre":"male", "simulate": true }
+     * 
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator|\Illuminate\Validation\Validator
+     */
+    protected function validateDtoFilterTournament(Request $request){
+        return Validator::make(
+            $request->query(),
+            [
+                'name' => 'string|max:255',
+                'genre' => [Rule::in(['female', 'male'])],
+                'created_at' => 'date|date_format:Y-m-d',
+                'simulated' => 'bool',
+                'champion' => 'integer'
             ]
         );
     }

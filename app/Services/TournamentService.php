@@ -7,6 +7,7 @@ use App\Enums\Genre;
 use App\Exceptions\InvalidBase2PlayersListException;
 use App\Exceptions\InvalidTournamentPlayersGenreException;
 use App\Exceptions\UnsaveResourceException;
+use App\Interfaces\iReaderFiltered;
 use App\Interfaces\iTournamentService;
 use App\Models\Player;
 use App\Models\Tournament;
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\DB;
 /**
  * Service Player Provider class
  */
-class TournamentService implements iTournamentService
+class TournamentService implements iTournamentService, iReaderFiltered
 {
     use Base2Util;
  
@@ -90,7 +91,26 @@ class TournamentService implements iTournamentService
     }
 
     /**
+     * Get all filtered tournaments entities.
+     * 
+     * @param array $filters
+     * @return array|null
+     */
+	public function readWithFilters(array $filters): ?array {
+        $conditions = Tournament::getFilterConditions($filters);
+
+        if( empty([$conditions]) ){
+            return [];
+        }
+
+        $tournaments = Tournament::with('players')->where($conditions)->get();
+
+        return $tournaments->all();
+    }
+
+    /**
      * Validate players list and player entities to save in tournament.
+     * 
      * @param string $genre
      * @param array $players
      * @throws InvalidBase2PlayersListException 

@@ -1,14 +1,8 @@
 <?php
 
-use App\Simulators\TennisGame;
-use App\Simulators\TennisMatch;
-use App\Simulators\TennisSet;
-use App\Simulators\TennisTournament;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\TournamentController;
-use App\Models\Player;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Route as RoutingRoute;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,7 +34,13 @@ Route::delete('/players/{id}', [PlayerController::class, 'destroy']);
 /**
  * TOURNAMENT ENDPOINTS
  */
-Route::get('/tournaments', [TournamentController::class, 'index']);
+Route::get('/tournaments', function(Request $request){
+    if($request->query->count()){
+        return App::call('App\Http\Controllers\TournamentController@filter');;
+    }
+
+    return App::call('App\Http\Controllers\TournamentController@index');
+});
 Route::get('/tournaments/{id}', [TournamentController::class, 'show']);
 Route::post('/tournaments', [TournamentController::class,'store']);
 Route::put('/tournaments/{id}/simulate', [TournamentController::class,'play']);
