@@ -1,0 +1,1071 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Tennis Simulator",
+        "description": "This API allows create tennis players and simulate tennis tournaments.\n",
+        "version": "0.1.0",
+        "contact": {
+            "name": "Juan P. Alegría",
+            "email": "jalegria.trabajo|at|gmail"
+        }
+    },
+    "tags": [
+        {
+            "name": "Players",
+            "description": "Player's resources"
+        },
+        {
+            "name": "Tournaments",
+            "description": "Tournaments's resources"
+        }
+    ],
+    "paths": {
+        "/players": {
+            "get": {
+                "summary": "Player's list.",
+                "description": "Retrieves the currents players available.",
+                "tags": [
+                    "Players"
+                ],
+                "operationId": "Player's List",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items":{
+                                        "$ref": "#/components/schemas/Player"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Player's creation.",
+                "description": "Create a player resource.",
+                "tags": [
+                    "Players"
+                ],
+                "operationId": "New Player",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NewPlayer"
+                            },
+                            "example": {
+                                "name": "Marolio",
+                                "level": 100,
+                                "skills": {
+                                    "strength": 10,
+                                    "velocity": 10
+                                },
+                                "genre": "male"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Player"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "The provided parameters are incorrect",
+                        "content": {
+                            "text/html": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                },
+                                "example":{
+                                    "code": 422,
+                                    "message": "Check that the data you are sending in your request is valid."
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Error",
+                        "content": {
+                            "text/html": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                },
+                                "example":{
+                                    "code": 500,
+                                    "message": "The server encountered an unexpected condition. This endpoint is temporarily having issues."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/players/{id}": {
+            "get": {
+                "summary": "Player.",
+                "description": "Retrieves a player by ID.",
+                "tags": [
+                    "Players"
+                ],
+                "operationId": "Player",
+                "parameters":[
+                    {
+                            "$ref":"#/components/parameters/id"
+                }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Player"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "The resource is not found",
+                        "content": {
+                            "text/html": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                },
+                                "example":{
+                                    "code": 404,
+                                    "message": "Check that you are using valid parameters and the correct URI for the endpoint you’re using."
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "The provided parameters are incorrect",
+                        "content": {
+                            "text/html": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                },
+                                "example":{
+                                    "code": 422,
+                                    "message": "Check that the data you are sending in your request is valid."
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Error",
+                        "content": {
+                            "text/html": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                },
+                                "example":{
+                                    "code": 500,
+                                    "message": "The server encountered an unexpected condition. This endpoint is temporarily having issues."
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete Player.",
+                "description": "Remove a player by ID.",
+                "tags": [
+                    "Players"
+                ],
+                "operationId": "Player",
+                "parameters":[
+                    {
+                            "$ref":"#/components/parameters/id"
+                }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content, the resources was removed."
+                    },
+                    "404": {
+                        "description": "The resource is not found",
+                        "content": {
+                            "text/html": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                },
+                                "example":{
+                                    "code": 404,
+                                    "message": "Check that you are using valid parameters and the correct URI for the endpoint you’re using."
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "The provided parameters are incorrect",
+                        "content": {
+                            "text/html": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                },
+                                "example":{
+                                    "code": 422,
+                                    "message": "Check that the data you are sending in your request is valid."
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Error",
+                        "content": {
+                            "text/html": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                },
+                                "example":{
+                                    "code": 500,
+                                    "message": "The server encountered an unexpected condition. This endpoint is temporarily having issues."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tournaments": {
+            "get": {
+                "summary": "Tournament's list.",
+                "description": "Retrieves the currents tournaments available.",
+                "tags": [
+                    "Tournaments"
+                ],
+                "operationId": "Tournament's List",
+                "parameters":[
+                    {
+                        "$ref":"#/components/parameters/name"
+                    },
+                    {
+                        "$ref":"#/components/parameters/genre"
+                    },
+                    {
+                        "$ref":"#/components/parameters/created_at"
+                    },
+                    {
+                        "$ref":"#/components/parameters/champion"
+                    },
+                    {
+                        "$ref":"#/components/parameters/simulated"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items":{
+                                        "$ref": "#/components/schemas/Tournament"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post":{
+                "summary": "Tournament's creation.",
+                "description": "Create a tournament resource.",
+                "tags": [
+                    "Tournaments"
+                ],
+                "operationId": "New Tournament",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NewTournament"
+                            },
+                            "example": {
+                                "name":"COPA MAROLIO",
+                                "players": [2,8],
+                                "genre":"female",
+                                "simulate": false
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Tournament"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "The provided parameters are incorrect",
+                        "content": {
+                            "text/html": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                },
+                                "example":{
+                                    "code": 422,
+                                    "message": "Check that the data you are sending in your request is valid."
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Error",
+                        "content": {
+                            "text/html": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                },
+                                "example":{
+                                    "code": 500,
+                                    "message": "The server encountered an unexpected condition. This endpoint is temporarily having issues."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tournaments/{id}": {
+            "get": {
+                "summary": "Tournament",
+                "description": "Retrieves a tournament data by ID.",
+                "tags": [
+                    "Tournaments"
+                ],
+                "operationId": "Tournament",
+                "parameters":[
+                    {
+                        "$ref":"#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Tournament"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "The resource is not found",
+                        "content": {
+                            "text/html": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                },
+                                "example":{
+                                    "code": 404,
+                                    "message": "Check that you are using valid parameters and the correct URI for the endpoint you’re using."
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "The provided parameters are incorrect",
+                        "content": {
+                            "text/html": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                },
+                                "example":{
+                                    "code": 422,
+                                    "message": "Check that the data you are sending in your request is valid."
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Error",
+                        "content": {
+                            "text/html": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                },
+                                "example":{
+                                    "code": 500,
+                                    "message": "The server encountered an unexpected condition. This endpoint is temporarily having issues."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ping": {
+            "get": {
+                "summary": "API Ping",
+                "description": "A simple health ping check.",
+                "tags": [
+                    "Api"
+                ],
+                "operationId": "API Ping",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code":{
+                                            "type": "integer"
+                                        },
+                                        "message":{
+                                            "type": "string"
+                                        }
+                                    },
+                                    "example":{
+                                            "code": 200,
+                                            "message": "pong"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tournaments/{id}/simulate": {
+            "put": {
+                "summary": "Simulate a tournament",
+                "description": "Simulate a tournament and retrieves it with results and a champion.",
+                "tags": [
+                    "Tournaments"
+                ],
+                "operationId": "Play Tournament",
+                "parameters":[
+                    {
+                        "$ref":"#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Tournament"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "The resource is not found",
+                        "content": {
+                            "text/html": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                },
+                                "example":{
+                                    "code": 404,
+                                    "message": "Check that you are using valid parameters and the correct URI for the endpoint you’re using."
+                                }
+                            }
+                        }
+                    },
+                    "412": {
+                        "description": "The resource is already simulated",
+                        "content": {
+                            "text/html": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                },
+                                "example":{
+                                    "code": 404,
+                                    "message": "One or more preconditions on the current resource state is evaluated to false when tested. Used to indicate that an API endpoint has been turned off for this resource."
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "The provided parameters are incorrect",
+                        "content": {
+                            "text/html": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                },
+                                "example":{
+                                    "code": 422,
+                                    "message": "Check that the data you are sending in your request is valid."
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Error",
+                        "content": {
+                            "text/html": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                },
+                                "example":{
+                                    "code": 500,
+                                    "message": "The server encountered an unexpected condition. This endpoint is temporarily having issues."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "parameters": {
+            "id":{
+                "in": "path",
+                "description": "A resource identification number.",
+                "name": "id",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "name":{
+                "in": "query",
+                "description": "A resource identification name.",
+                "name": "name",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "genre":{
+                "in": "query",
+                "description": "A resource identification genre.",
+                "name": "genre",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "created_at":{
+                "in": "query",
+                "description": "A resource identification created date.",
+                "name": "created_at",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "champion":{
+                "in": "query",
+                "description": "A resource identification player's id.",
+                "name": "champion",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "simulated":{
+                "in": "query",
+                "description": "A resource identification if It was simulated game.",
+                "name": "simulated",
+                "required": false,
+                "schema": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "schemas": {
+            "Player": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "level": {
+                        "type": "integer",
+                        "description": "Levels from 0 to 100."
+                    },
+                    "skills": {
+                        "type": "object",
+                        "description": "Profency skills from 1 to 10.",
+                        "properties": {
+                            "reaction": {
+                                "type": "integer",
+                                "description": "Only for female genre."
+                            },
+                            "strength": {
+                                "type": "integer",
+                                "description": "Only for male genre."
+                            },
+                            "velocity": {
+                                "type": "integer",
+                                "description": "Only for male genre."
+                            }
+                        }
+                    },
+                    "genre": {
+                        "type": "string",
+                        "description": "Options: female o male"
+                    }
+                },
+                "example": {
+                    "id": 1,
+                    "name": "Marolio",
+                    "level": 100,
+                    "skills": "{\"strength\":10,\"velocity\":10}",
+                    "genre": "male"
+                }
+            },
+            "NewPlayer": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "level": {
+                        "type": "integer",
+                        "description": "Levels from 0 to 100."
+                    },
+                    "skills": {
+                        "type": "object",
+                        "description": "Profency skills from 1 to 10.",
+                        "properties": {
+                            "reaction": {
+                                "type": "integer",
+                                "description": "Only for female genre."
+                            },
+                            "strength": {
+                                "type": "integer",
+                                "description": "Only for male genre."
+                            },
+                            "velocity": {
+                                "type": "integer",
+                                "description": "Only for male genre."
+                            }
+                        }
+                    },
+                    "genre": {
+                        "type": "string",
+                        "description": "Options: female o male"
+                    }
+                },
+                "required": [
+                    "name",
+                    "level",
+                    "skills",
+                    "genre"
+                ],
+                "example": {
+                    "name": "Marolio",
+                    "level": 100,
+                    "skills": {
+                        "strength": 10,
+                        "velocity": 10
+                    },
+                    "genre": "male"
+                }
+            },
+            "Tournament": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "genre": {
+                        "type": "string",
+                        "description": "Options: female o male"
+                    },
+                    "champion":{
+                        "type":"integer",
+                        "description": "Tournament's Winner"
+                    },
+                    "results":{
+                        "type":"object",
+                        "description": "fixture and all details results of tournament",
+                                "$ref": "#/components/schemas/Fixture"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "description": "Creation date"
+                    },
+                    "players":{
+                        "type":"array",
+                        "items":{
+                            "$ref":"#/components/schemas/Player"
+                        }
+                    }
+                },
+                "example": {
+                    "id": 26,
+                    "name": "COPA MAROLIO",
+                    "genre": "female",
+                    "champion": 2,
+                    "results": {
+                        "tournament": {
+                            "fixture": {
+                                "rounds": [
+                                    [
+                                        [
+                                            8,
+                                            2
+                                        ]
+                                    ]
+                                ]
+                            },
+                            "matches": [
+                                {
+                                    "match": {
+                                        "players": [
+                                            8,
+                                            2
+                                        ],
+                                        "sets": {
+                                            "8": 1,
+                                            "2": 2
+                                        },
+                                        "results": [
+                                            {
+                                                "set": {
+                                                    "games": {
+                                                        "8": 1,
+                                                        "2": 6
+                                                    },
+                                                    "results": [
+                                                        {
+                                                            "score": {
+                                                                "8": "15",
+                                                                "2": "Game"
+                                                            }
+                                                        },
+                                                        {
+                                                            "score": {
+                                                                "8": "15",
+                                                                "2": "Game"
+                                                            }
+                                                        },
+                                                        {
+                                                            "score": {
+                                                                "8": "40",
+                                                                "2": "Game"
+                                                            }
+                                                        },
+                                                        {
+                                                            "score": {
+                                                                "8": "30",
+                                                                "2": "Game"
+                                                            }
+                                                        },
+                                                        {
+                                                            "score": {
+                                                                "8": "10",
+                                                                "2": "Game"
+                                                            }
+                                                        },
+                                                        {
+                                                            "score": {
+                                                                "8": "Game",
+                                                                "2": "15"
+                                                            }
+                                                        },
+                                                        {
+                                                            "score": {
+                                                                "8": "15",
+                                                                "2": "Game"
+                                                            }
+                                                        }
+                                                    ],
+                                                    "winner": 2
+                                                }
+                                            },
+                                            {
+                                                "set": {
+                                                    "games": {
+                                                        "8": 6,
+                                                        "2": 2
+                                                    },
+                                                    "results": [
+                                                        {
+                                                            "score": {
+                                                                "8": "40",
+                                                                "2": "Game"
+                                                            }
+                                                        },
+                                                        {
+                                                            "score": {
+                                                                "8": "Game",
+                                                                "2": "40"
+                                                            }
+                                                        },
+                                                        {
+                                                            "score": {
+                                                                "8": "Game",
+                                                                "2": "40"
+                                                            }
+                                                        },
+                                                        {
+                                                            "score": {
+                                                                "8": "Game",
+                                                                "2": "10"
+                                                            }
+                                                        },
+                                                        {
+                                                            "score": {
+                                                                "8": "Game",
+                                                                "2": "10"
+                                                            }
+                                                        },
+                                                        {
+                                                            "score": {
+                                                                "8": "10",
+                                                                "2": "Game"
+                                                            }
+                                                        },
+                                                        {
+                                                            "score": {
+                                                                "8": "Game",
+                                                                "2": "10"
+                                                            }
+                                                        },
+                                                        {
+                                                            "score": {
+                                                                "8": "Game",
+                                                                "2": "15"
+                                                            }
+                                                        }
+                                                    ],
+                                                    "winner": 8
+                                                }
+                                            },
+                                            {
+                                                "set": {
+                                                    "games": {
+                                                        "8": 4,
+                                                        "2": 6
+                                                    },
+                                                    "results": [
+                                                        {
+                                                            "score": {
+                                                                "8": "30",
+                                                                "2": "Game"
+                                                            }
+                                                        },
+                                                        {
+                                                            "score": {
+                                                                "8": "Game",
+                                                                "2": "40"
+                                                            }
+                                                        },
+                                                        {
+                                                            "score": {
+                                                                "8": "Game",
+                                                                "2": "10"
+                                                            }
+                                                        },
+                                                        {
+                                                            "score": {
+                                                                "8": "30",
+                                                                "2": "Game"
+                                                            }
+                                                        },
+                                                        {
+                                                            "score": {
+                                                                "8": "Game",
+                                                                "2": "30"
+                                                            }
+                                                        },
+                                                        {
+                                                            "score": {
+                                                                "8": "40",
+                                                                "2": "Game"
+                                                            }
+                                                        },
+                                                        {
+                                                            "score": {
+                                                                "8": "30",
+                                                                "2": "Game"
+                                                            }
+                                                        },
+                                                        {
+                                                            "score": {
+                                                                "8": "30",
+                                                                "2": "Game"
+                                                            }
+                                                        },
+                                                        {
+                                                            "score": {
+                                                                "8": "Game",
+                                                                "2": "40"
+                                                            }
+                                                        },
+                                                        {
+                                                            "score": {
+                                                                "8": "15",
+                                                                "2": "Game"
+                                                            }
+                                                        }
+                                                    ],
+                                                    "winner": 2
+                                                }
+                                            }
+                                        ],
+                                        "winner": 2
+                                    }
+                                }
+                            ],
+                            "winner": 2
+                        }
+                    },
+                    "created_at": "2022-12-12",
+                    "players": [
+                        {
+                            "id": 2,
+                            "name": "Isobel",
+                            "level": 56,
+                            "skills": "{\"reaction\":8}",
+                            "genre": "female"
+                        },
+                        {
+                            "id": 8,
+                            "name": "Oceane",
+                            "level": 57,
+                            "skills": "{\"reaction\":10}",
+                            "genre": "female"
+                        }
+                    ]
+                }
+            },
+            "Fixture":{
+                "type":"object",
+                "description":"Fixture of all tournament",
+                "properties": {
+                    "rounds":{
+                        "type": "array",
+                        "items":{
+                                "description": "Match representation by ID Player's pair"
+                        }
+                    },
+                    "matches":{
+                        "type": "array",
+                        "description": "List of matches played",
+                        "items":{
+                            "$ref": "#/components/schemas/Match"
+                        }
+                    }
+                }
+            },
+            "Match":{
+                "type":"object",
+                "description":"A tennis match",
+                "properties": {
+                    "players":{
+                        "type": "array",
+                        "items":{
+                            "type": "integer",
+                            "description": "Players ID"
+                        }
+                    },
+                    "sets":{
+                        "type": "object",
+                        "description": "Sets of the match by players ID"
+                    },
+                    "results":{
+                        "type": "array",
+                        "items":{
+                            "$ref": "#/components/schemas/Set"
+                        }
+                    }
+                }
+            },
+            "Set":{
+                "type":"object",
+                "description":"A tennis set",
+                "properties": {
+                    "games":{
+                        "type": "object",
+                        "description": "Games of the set by players ID"
+                    },
+                    "results":{
+                        "type": "array",
+                        "items":{
+                            "$ref":"#/components/schemas/Score"
+                        }
+                    }
+                }
+            },
+            "Score":{
+                "type": "object",
+                "description": "Score of the game by players ID"
+            },
+            "NewTournament": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "players": {
+                        "type": "array",
+                        "description": "List players' ID. The players must be same tournament's genre.",
+                        "items":{
+                            "type": "integer"
+                        }
+                    },
+                    "genre": {
+                        "type": "string",
+                        "description": "Options: female o male"
+                    },
+                    "simulate":{
+                        "type": "boolean",
+                        "description": "Simulate the tennis game."
+                    }
+                },
+                "required": [
+                    "name",
+                    "players",
+                    "genre",
+                    "simulate"
+                ],
+                "example": {
+                    "name":"COPA MAROLIO",
+                    "players": [4,6],
+                    "genre":"female",
+                    "simulate": false
+                }
+            },
+            "ErrorMessage":{
+                "type":"object",
+                "description":"General error message.",
+                "properties": {
+                    "code":{
+                        "type": "integer",
+                        "description": "Error Code"
+                    },
+                    "message":{
+                        "type": "string",
+                        "description": "Help message for the error."
+                    }
+                }
+            }
+        }
+    }
+}
