@@ -45,6 +45,12 @@ _Listo! Ya puedes crear y simular un torneo de tenis! 🎾_
 ## Open API Doc 📖
 _Puedes encontrar la documentación de los endpoints en: resources/openapi/._
 
+## To-Do:
+_Roadmap del futuro desarrollo:_
++ Simulación de tie-break.
++ Test-unitarios.
++ Frontend.
+
 ## Autor ⌨️
 _Desarrollado por:_
 * **Juan Pablo Alegría** - [correo](jalegria.trabajo|at|gmail)
