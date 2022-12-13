@@ -9,7 +9,8 @@ use Exception;
  */
 class InvalidAlreadySimulatedTournamentException extends Exception
 {
-    public function __construct() {
+    public function __construct()
+    {
         $this->message = "Tournament is already simulated and It has a champion";
     }
 }

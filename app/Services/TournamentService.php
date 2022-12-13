@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\DB;
 class TournamentService implements iTournamentService, iReaderFiltered
 {
     use Base2Util;
- 
+
     public function __construct()
     {
     }
@@ -30,28 +30,27 @@ class TournamentService implements iTournamentService, iReaderFiltered
      * @param string $name
      * @param array $players
      * @param string $genre
-     * @throws UnsaveResourceException 
+     * @throws UnsaveResourceException
      * @return Tournament|null
      */
     public function create(string $name, array $players, string $genre): ?Tournament
     {
-        if(!$this->validatePlayers($genre, $players)){
-            return NULL;
+        if (!$this->validatePlayers($genre, $players)) {
+            return null;
         }
         try {
             DB::beginTransaction();
-        
+
             $tournament = new Tournament();
             $tournament->name = $name;
             $tournament->genre = $genre;
 
-            if($tournament->save()){
-                $playersToSign = Player::whereIn('id' , $players)->get();
-                if(!$tournament->players()->saveMany($playersToSign)){
+            if ($tournament->save()) {
+                $playersToSign = Player::whereIn('id', $players)->get();
+                if (!$tournament->players()->saveMany($playersToSign)) {
                     throw new UnsaveResourceException();
                 };
-                
-            }else{
+            } else {
                 throw new UnsaveResourceException();
             }
 
@@ -59,11 +58,10 @@ class TournamentService implements iTournamentService, iReaderFiltered
             DB::commit();
 
             return $this->readOne($tournament->id);
-                
         } catch (\Throwable $e) {
             DB::rollback();
             error_log($e);
-            return NULL;
+            return null;
         }
     }
 
@@ -86,20 +84,21 @@ class TournamentService implements iTournamentService, iReaderFiltered
     public function readAll(): ?array
     {
         $tournaments = Tournament::with('players')->get();
-       
+
         return $tournaments->all();
     }
 
     /**
      * Get all filtered tournaments entities.
-     * 
+     *
      * @param array $filters
      * @return array|null
      */
-	public function readWithFilters(array $filters): ?array {
+    public function readWithFilters(array $filters): ?array
+    {
         $conditions = Tournament::getFilterConditions($filters);
 
-        if( empty([$conditions]) ){
+        if (empty([$conditions])) {
             return [];
         }
 
@@ -110,24 +109,25 @@ class TournamentService implements iTournamentService, iReaderFiltered
 
     /**
      * Validate players list and player entities to save in tournament.
-     * 
+     *
      * @param string $genre
      * @param array $players
-     * @throws InvalidBase2PlayersListException 
-     * @throws InvalidTournamentPlayersGenreException 
+     * @throws InvalidBase2PlayersListException
+     * @throws InvalidTournamentPlayersGenreException
      * @return bool
      */
-    protected function validatePlayers(string $genre, array $players){
-        if(!self::isBase2($players)){
+    protected function validatePlayers(string $genre, array $players)
+    {
+        if (!self::isBase2($players)) {
             throw new InvalidBase2PlayersListException();
         }
 
         $playersQuantity = Player::where('genre', Genre::mutate($genre))->whereIn('id', $players)->count();
 
-        if($playersQuantity !== count($players)){
+        if ($playersQuantity !== count($players)) {
             throw new InvalidTournamentPlayersGenreException();
         }
 
-        return TRUE;
+        return true;
     }
 }

@@ -9,5 +9,4 @@ use App\Interfaces\iSimulator;
  */
 interface iGameSimulator extends iSimulator
 {
-
 }

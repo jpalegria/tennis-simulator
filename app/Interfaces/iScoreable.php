@@ -2,8 +2,8 @@
 
 namespace App\Interfaces;
 
-interface iScoreable{
-
+interface iScoreable
+{
     /**
      * Gets a scoring for a game.
      * @return string|array

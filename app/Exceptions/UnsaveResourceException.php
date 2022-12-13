@@ -11,7 +11,8 @@ class UnsaveResourceException extends Exception
 {
     /**
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->message = "Resource could not be persisted";
     }
 }

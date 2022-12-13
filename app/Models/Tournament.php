@@ -47,10 +47,11 @@ class Tournament extends Model
 
     /**
      * Attribute serializable from Player Model.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function players(){
+    public function players()
+    {
         //return $this->belongsToMany(Player::class, 'player_tournament', 'player_id','tournament_id'); //Alternative option
         return $this->belongsToMany(Player::class);
     }
@@ -60,9 +61,10 @@ class Tournament extends Model
      * Attribute format for createdAt
      * @return Attribute
      */
-    public function createdAt(): Attribute{
+    public function createdAt(): Attribute
+    {
         return Attribute::make(
-            get: fn($value) => (new \DateTime($value))->format('Y-m-d')
+            get: fn ($value) => (new \DateTime($value))->format('Y-m-d')
         );
     }
 
@@ -71,33 +73,33 @@ class Tournament extends Model
      * @param array $params
      * @return array
      */
-    public static function getFilterConditions(array $params):array{
+    public static function getFilterConditions(array $params): array
+    {
         $params = self::sanitizeFieldsFilter($params);
 
-        $conditions = [];   
+        $conditions = [];
 
-        if($params['name']){
+        if ($params['name']) {
             $conditions[] = ['name', 'like', '%' . $params['name'] . '%'];
         }
 
-        if($params['genre']){
+        if ($params['genre']) {
             $conditions[] = ['genre', Genre::mutate($params['genre'])];
         }
 
-        if($params['created_at']){
+        if ($params['created_at']) {
             $conditions[] = ['created_at', 'like', $params['created_at'].'%'];
         }
 
-        if($params['simulated'] !== NULL)
-        {
-            if($params['simulated']){
+        if ($params['simulated'] !== null) {
+            if ($params['simulated']) {
                 $conditions[] = ['champion', '<>', ''];
-            }else{
-                $conditions[] = ['champion', NULL];
-            }  
+            } else {
+                $conditions[] = ['champion', null];
+            }
         }
 
-        if($params['champion']){
+        if ($params['champion']) {
             $conditions[] = ['champion', $params['champion']];
         }
 
@@ -109,7 +111,8 @@ class Tournament extends Model
      * @param array $fields
      * @return array|bool|null
      */
-    protected static function sanitizeFieldsFilter(array $fields){
+    protected static function sanitizeFieldsFilter(array $fields)
+    {
         $definitions = [
             'name' => FILTER_SANITIZE_STRING,
             'genre' => FILTER_SANITIZE_STRING,

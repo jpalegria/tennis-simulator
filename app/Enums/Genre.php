@@ -1,10 +1,11 @@
 <?php
+
 namespace App\Enums;
 
 /**
  * Genre Enumeration
  */
-enum Genre:int
+enum Genre: int
 {
     case male = 0;
     case female = 1;
@@ -16,7 +17,7 @@ enum Genre:int
      */
     public static function mutate(string $genre): int
     {
-        return match($genre) {
+        return match ($genre) {
             Genre::male->name => Genre::male->value,
             Genre::female->name => Genre::female->value,
         };

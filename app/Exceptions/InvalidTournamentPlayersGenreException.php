@@ -9,7 +9,8 @@ use Exception;
  */
 class InvalidTournamentPlayersGenreException extends Exception
 {
-    public function __construct() {
+    public function __construct()
+    {
         $this->message = "Tournament's players must be same genre than tournament's genre attribute";
     }
 }

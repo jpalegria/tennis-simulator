@@ -8,10 +8,10 @@ use App\Models\Player;
 /**
  * Static class to emulate a tennis game.
  */
-class TennisGameEmulator implements iGameEmulator{
-
-    const ABILITY_MISTAKE = 1;
-    const ABILITY_AMAZING = 100;
+class TennisGameEmulator implements iGameEmulator
+{
+    public const ABILITY_MISTAKE = 1;
+    public const ABILITY_AMAZING = 100;
 
     /**
      * Emulate a tennis game and return a winner player.
@@ -19,13 +19,14 @@ class TennisGameEmulator implements iGameEmulator{
      * @param object $player2
      * @return object
      */
-    public static function emulate(Object $player1, Object $player2):Object{
+    public static function emulate(Object $player1, Object $player2): Object
+    {
         $player1ratio = self::calculateAbilityCheck($player1);
         $player2ratio = self::calculateAbilityCheck($player2);
 
-        if($player1ratio === $player2ratio){
+        if ($player1ratio === $player2ratio) {
             $gameWinner = self::emulate($player1, $player2);
-        }else{
+        } else {
             $gameWinner = ($player1ratio > $player2ratio ? $player1 : $player2);
         }
 
@@ -37,21 +38,19 @@ class TennisGameEmulator implements iGameEmulator{
      * @param Player $player A tennis Player Model
      * @return float|int
      */
-    protected static function calculateAbilityCheck(Player $player):float|int
+    protected static function calculateAbilityCheck(Player $player): float|int
     {
-
         $uncertainty = self::rollDie();
-        
-        if($uncertainty === self::ABILITY_MISTAKE){
-            return 0;
 
-        }elseif($uncertainty === self::ABILITY_AMAZING){
+        if ($uncertainty === self::ABILITY_MISTAKE) {
+            return 0;
+        } elseif ($uncertainty === self::ABILITY_AMAZING) {
             return 100;
         }
 
         $ability = self::getAbility($player->level);
         $modifiers = self::getSkillsModifiers($player->skills);
-        
+
         return $ability+$modifiers+$uncertainty;
     }
 
@@ -60,7 +59,8 @@ class TennisGameEmulator implements iGameEmulator{
      * @param string $skills
      * @return float
      */
-    protected static function getSkillsModifiers(string $skills):float{
+    protected static function getSkillsModifiers(string $skills): float
+    {
         $skills = json_decode($skills);
         $modifiers = 0;
 
@@ -76,7 +76,8 @@ class TennisGameEmulator implements iGameEmulator{
      * @param int $level
      * @return float
      */
-    protected static function getAbility(int $level):float{
+    protected static function getAbility(int $level): float
+    {
         return round($level/10);
     }
 
@@ -84,7 +85,8 @@ class TennisGameEmulator implements iGameEmulator{
      * Get a luck factor in a game.
      * @return int
      */
-    protected static function rollDie():int{
+    protected static function rollDie(): int
+    {
         return rand(self::ABILITY_MISTAKE, self::ABILITY_AMAZING);
     }
 
@@ -94,7 +96,8 @@ class TennisGameEmulator implements iGameEmulator{
      * @param mixed $max
      * @return float
      */
-    protected static function randomFloat($min = 0, $max = 1):float {
+    protected static function randomFloat($min = 0, $max = 1): float
+    {
         return $min + mt_rand() / mt_getrandmax() * ($max - $min);
     }
 }

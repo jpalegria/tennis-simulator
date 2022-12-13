@@ -4,11 +4,10 @@ namespace App\Interfaces;
 
 use App\Models\Tournament;
 
-
 interface iTennisService
 {
     /**
-     * Simulate a tennis tournament. 
+     * Simulate a tennis tournament.
      * @param Tournament $tournament
      * @return bool
      */

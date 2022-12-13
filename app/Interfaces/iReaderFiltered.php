@@ -7,7 +7,6 @@ namespace App\Interfaces;
  */
 interface iReaderFiltered
 {
-
     /**
      * Get resources filtered with any conditions
      * @param array $filters

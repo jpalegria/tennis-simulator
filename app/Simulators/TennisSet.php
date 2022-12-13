@@ -9,7 +9,8 @@ use App\Models\Player;
 /**
  * Simulator for a tennis's set
  */
-class TennisSet implements iSetSimulator, iScoreable{
+class TennisSet implements iSetSimulator, iScoreable
+{
     protected Player $player1;
     protected Player $player2;
     protected $games = [];
@@ -37,9 +38,9 @@ class TennisSet implements iSetSimulator, iScoreable{
      * Simulate a tennis set and return a winner player.
      * @return Player
      */
-    public function simulate():Player{
-
-        while(!$this->isfinished()){
+    public function simulate(): Player
+    {
+        while (!$this->isfinished()) {
             $game = new TennisGame($this->player1, $this->player2);
             $winner = $game->simulate();
             $this->results[] = $game->getScores();
@@ -54,18 +55,18 @@ class TennisSet implements iSetSimulator, iScoreable{
      * @param Player $player
      * @return array<int>|bool Return the score or False if exists a winner.
      */
-    public function gameTo(Player $player){
-
-        if($this->isfinished()){
-            return FALSE;
+    public function gameTo(Player $player)
+    {
+        if ($this->isfinished()) {
+            return false;
         }
 
         $this->addGame($player);
         $setGames = $this->games[$player->id];
 
-        if($this->isWinner($setGames)){
+        if ($this->isWinner($setGames)) {
             $this->finish($player);
-            return TRUE;
+            return true;
         }
 
         return $this->games;
@@ -76,7 +77,8 @@ class TennisSet implements iSetSimulator, iScoreable{
      * @param Player $player
      * @return void
      */
-    public function addGame(Player $player){
+    public function addGame(Player $player)
+    {
         $this->games[$player->id]++;
     }
 
@@ -84,7 +86,8 @@ class TennisSet implements iSetSimulator, iScoreable{
      * It indicates if the game finished and exists a game's winner.
      * @return bool
      */
-    public function isfinished():bool{
+    public function isfinished(): bool
+    {
         return (bool) $this->winner;
     }
 
@@ -93,8 +96,9 @@ class TennisSet implements iSetSimulator, iScoreable{
      * @param mixed $setGames
      * @return bool
      */
-    public function isWinner(string|int $setGames):bool{
-        return ($setGames === 7) or ($setGames === 6 AND abs($this->games[$this->players[0]] - $this->games[$this->players[1]]) >= 2);
+    public function isWinner(string|int $setGames): bool
+    {
+        return ($setGames === 7) or ($setGames === 6 and abs($this->games[$this->players[0]] - $this->games[$this->players[1]]) >= 2);
     }
 
     /**
@@ -102,19 +106,21 @@ class TennisSet implements iSetSimulator, iScoreable{
      * @param Player $winner
      * @return void
      */
-    public function finish(Player $winner){
+    public function finish(Player $winner)
+    {
         $this->winner = $winner->id;
     }
 
-	/**
+    /**
      * @inheritDoc
-	 * @return array|string
-	 */
-	public function getScores(): array|string {
+     * @return array|string
+     */
+    public function getScores(): array|string
+    {
         $this->score['set']['games'] = $this->games;
         $this->score['set']['results'] = $this->results;
         $this->score['set']['winner'] = $this->winner;
 
         return $this->score;
-	}
+    }
 }

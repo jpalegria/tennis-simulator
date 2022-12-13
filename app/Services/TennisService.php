@@ -13,15 +13,15 @@ use App\Simulators\TennisTournament;
 class TennisService implements iTennisService
 {
     /**
-     * Simulate the tennis playoffs of a tournament and save the results to the entity. 
-     * 
+     * Simulate the tennis playoffs of a tournament and save the results to the entity.
+     *
      * @param Tournament $tournament
-     * @throws InvalidAlreadySimulatedTournamentException 
+     * @throws InvalidAlreadySimulatedTournamentException
      * @return bool|array|object
      */
     public function play(Tournament $tournament): bool|array|object
     {
-        if(!empty($tournament->champion)){
+        if (!empty($tournament->champion)) {
             throw new InvalidAlreadySimulatedTournamentException();
         }
 

@@ -4,7 +4,6 @@ namespace App\Interfaces;
 
 interface iSimulator
 {
-
     /**
      * Simulate stuffs
      * @return mixed

@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Utils\IdValidatorUtil;
 
-
 class TournamentController extends Controller
 {
     use IdValidatorUtil;
@@ -42,11 +41,10 @@ class TournamentController extends Controller
      */
     public function index()
     {
-        try{
+        try {
             $responseData = $this->tournamentService->readAll();
             return response()->json($responseData);
-        }
-        catch(\Throwable $error){
+        } catch(\Throwable $error) {
             error_log($error);
             $errorResponse = new HttpResponse500();
 
@@ -62,29 +60,28 @@ class TournamentController extends Controller
      */
     public function show(string $id)
     {
-        try{
+        try {
             $id = $this->validateId($id);
 
-            if(empty($id)){
+            if (empty($id)) {
                 $httpResponse = new HttpResponse422();
                 return response()->json($httpResponse->parse(), $httpResponse->getCode());
             }
 
             $dataResponse = $this->tournamentService->readOne($id);
 
-            if(empty($dataResponse)){
+            if (empty($dataResponse)) {
                 $httpResponse = new HttpResponse404();
                 return response()->json($httpResponse->parse(), $httpResponse->getCode());
             }
 
             return response()->json($dataResponse);
-        }
-        catch(\Throwable $error){
+        } catch(\Throwable $error) {
             error_log($error);
             $errorResponse = new HttpResponse500();
 
             return response()->json($errorResponse->parse(), $errorResponse->getCode());
-        }  
+        }
     }
 
     /**
@@ -95,7 +92,7 @@ class TournamentController extends Controller
      */
     public function store(Request $request)
     {
-        try{
+        try {
             $validation = $this->validateDtoCreateTournament($request);
 
             if ($validation->fails()) {
@@ -115,26 +112,23 @@ class TournamentController extends Controller
             );
 
 
-            if(empty($newTournament)){
+            if (empty($newTournament)) {
                 $errorResponse = new HttpResponse500("Error in tournament's creation!");
                 return response()->json($errorResponse->parse(), $errorResponse->getCode());
             }
 
-            if($dataValidated['simulate'] === true){
+            if ($dataValidated['simulate'] === true) {
                 $this->tennisService->play($newTournament);
             }
 
             return response()->json(["new_tournament" => $newTournament], 200);
-        }
-        catch(InvalidBase2PlayersListException $ex){
+        } catch(InvalidBase2PlayersListException $ex) {
             $errorResponse = new HttpResponse422($ex->getMessage());
             return response()->json($errorResponse->parse(), $errorResponse->getCode());
-        }
-        catch(InvalidTournamentPlayersGenreException $ex){
+        } catch(InvalidTournamentPlayersGenreException $ex) {
             $errorResponse = new HttpResponse422($ex->getMessage());
             return response()->json($errorResponse->parse(), $errorResponse->getCode());
-        }
-        catch(\Throwable $error){
+        } catch(\Throwable $error) {
             error_log($error);
             $errorResponse = new HttpResponse500();
             return response()->json($errorResponse->parse(), $errorResponse->getCode());
@@ -143,40 +137,37 @@ class TournamentController extends Controller
 
     /**
      * Simulate a tournament and update resource.
-     * 
+     *
      * @param string $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function play(string $id)
     {
         try {
-
             $id = $this->validateId($id);
 
-            if(empty($id)){
+            if (empty($id)) {
                 $httpResponse = new HttpResponse422();
                 return response()->json($httpResponse->parse(), $httpResponse->getCode());
             }
-    
+
             $tournament = $this->tournamentService->readOne($id);
-    
-            if(empty($tournament)){
+
+            if (empty($tournament)) {
                 $httpResponse = new HttpResponse404();
                 return response()->json($httpResponse->parse(), $httpResponse->getCode());
             }
-    
-            if( !$this->tennisService->play($tournament) ){
+
+            if (!$this->tennisService->play($tournament)) {
                 $httpResponse = new HttpResponse500("The server doesn't simulate tournament. This endpoint is temporarily having issues.");
                 return response()->json();
             }
-            
+
             return response()->json($tournament);
-        }
-        catch(InvalidAlreadySimulatedTournamentException $ex){
+        } catch(InvalidAlreadySimulatedTournamentException $ex) {
             $errorResponse = new HttpResponse412($ex->getMessage());
             return response()->json($errorResponse->parse(), $errorResponse->getCode());
-        }
-        catch(\Throwable $error){
+        } catch(\Throwable $error) {
             error_log($error);
             $errorResponse = new HttpResponse500();
             return response()->json($errorResponse->parse(), $errorResponse->getCode());
@@ -188,7 +179,8 @@ class TournamentController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function filter(Request $request){
+    public function filter(Request $request)
+    {
         try {
             $validation = $this->validateDtoFilterTournament($request);
 
@@ -204,9 +196,7 @@ class TournamentController extends Controller
             $tournamentsFounded = $this->tournamentService->readWithFilters($dataValidated);
 
             return response()->json($tournamentsFounded);
-
-        }
-        catch(\Throwable $error){
+        } catch(\Throwable $error) {
             error_log($error);
             $errorResponse = new HttpResponse500();
             return response()->json($errorResponse->parse(), $errorResponse->getCode());
@@ -214,13 +204,14 @@ class TournamentController extends Controller
     }
 
     /**
-     * Validate data request to creation for a tournament. 
+     * Validate data request to creation for a tournament.
      * Ex.: { "name":"MAROLIO'S TENNIS CUP", "players": [1,3,5,10], "genre":"male", "simulate": true }
-     * 
+     *
      * @param Request $request
      * @return \Illuminate\Contracts\Validation\Validator|\Illuminate\Validation\Validator
      */
-    protected function validateDtoCreateTournament(Request $request){
+    protected function validateDtoCreateTournament(Request $request)
+    {
         return Validator::make(
             $request->all(),
             [
@@ -233,13 +224,14 @@ class TournamentController extends Controller
     }
 
     /**
-     * Validate data request to filter for a tournament. 
+     * Validate data request to filter for a tournament.
      * Ex.: { "name":"MAROLIO'S TENNIS CUP", "players": [1,3,5,10], "genre":"male", "simulate": true }
-     * 
+     *
      * @param Request $request
      * @return \Illuminate\Contracts\Validation\Validator|\Illuminate\Validation\Validator
      */
-    protected function validateDtoFilterTournament(Request $request){
+    protected function validateDtoFilterTournament(Request $request)
+    {
         return Validator::make(
             $request->query(),
             [

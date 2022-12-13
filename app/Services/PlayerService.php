@@ -57,7 +57,7 @@ class PlayerService implements iPlayerService
     }
 
     /**
-     * Remove a player entity 
+     * Remove a player entity
      *
      * @param integer|string $id
      * @return boolean

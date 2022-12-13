@@ -11,7 +11,8 @@ class InvalidBase2PlayersListException extends Exception
 {
     /**
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->message = "Quantity players in list must be base 2";
     }
 }

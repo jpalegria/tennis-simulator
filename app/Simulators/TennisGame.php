@@ -11,7 +11,8 @@ use App\Models\Player;
 /**
  * Simulator for a tennis game.
  */
-class TennisGame implements iGameSimulator, iScoreable{
+class TennisGame implements iGameSimulator, iScoreable
+{
     protected Player $player1;
     protected Player $player2;
     protected $scoring = [];
@@ -37,9 +38,9 @@ class TennisGame implements iGameSimulator, iScoreable{
      * Simulate a tennis game and return a winner player.
      * @return Player
      */
-    public function simulate():Player{
-
-        while(!$this->isfinished()){
+    public function simulate(): Player
+    {
+        while (!$this->isfinished()) {
             $winner = TennisGameEmulator::emulate($this->player1, $this->player2);
             $this->pointTo($winner);
         }
@@ -52,7 +53,8 @@ class TennisGame implements iGameSimulator, iScoreable{
      * @param Player $player
      * @return void
      */
-    public function addPoint(Player $player){
+    public function addPoint(Player $player)
+    {
         $this->scoring[$player->id] = TennisPoints::addScore($this->scoring[$player->id]);
     }
 
@@ -60,7 +62,8 @@ class TennisGame implements iGameSimulator, iScoreable{
      * It brings to equals to forty-points to both players score.
      * @return void
      */
-    public function equalsFortyPoint(){
+    public function equalsFortyPoint()
+    {
         $this->scoring[$this->players[0]] = TennisPoints::FOURTY;
         $this->scoring[$this->players[1]] = TennisPoints::FOURTY;
     }
@@ -70,24 +73,22 @@ class TennisGame implements iGameSimulator, iScoreable{
      * @param Player $player
      * @return array<string>|bool
      */
-    public function pointTo(Player $player){
+    public function pointTo(Player $player)
+    {
         $playerScore = $this->scoring[$player->id];
 
-        if($this->isfinished()){
-            return FALSE;
+        if ($this->isfinished()) {
+            return false;
         }
 
-        if($playerScore === TennisPoints::FOURTY AND ($this->scoring[$this->players[0]] === $this->scoring[$this->players[1]]) ){
+        if ($playerScore === TennisPoints::FOURTY and ($this->scoring[$this->players[0]] === $this->scoring[$this->players[1]])) {
             $this->addPoint($player);
-        }
-        elseif($playerScore === TennisPoints::FOURTY AND in_array(TennisPoints::ADVANCE, $this->scoring)){
+        } elseif ($playerScore === TennisPoints::FOURTY and in_array(TennisPoints::ADVANCE, $this->scoring)) {
             $this->equalsFortyPoint();
-        }
-        elseif($playerScore === TennisPoints::FOURTY OR $playerScore === TennisPoints::ADVANCE){
+        } elseif ($playerScore === TennisPoints::FOURTY or $playerScore === TennisPoints::ADVANCE) {
             $this->finish($player);
-            // return TRUE;
-        }
-        else{
+        // return TRUE;
+        } else {
             $this->addPoint($player);
         }
 
@@ -98,7 +99,8 @@ class TennisGame implements iGameSimulator, iScoreable{
      * It indicates if exists a game's winner.
      * @return bool
      */
-    public function isfinished():bool{
+    public function isfinished(): bool
+    {
         return (bool) $this->winner;
     }
 
@@ -107,7 +109,8 @@ class TennisGame implements iGameSimulator, iScoreable{
      * @param Player $winner
      * @return void
      */
-    public function finish(Player $winner){
+    public function finish(Player $winner)
+    {
         $this->winner = $winner->id;
         $this->scoring[$this->winner] = TennisPoints::GAME;
     }
@@ -116,7 +119,8 @@ class TennisGame implements iGameSimulator, iScoreable{
      * @inheritDoc
      * @return array|string
      */
-	public function getScores(): array|string {
+    public function getScores(): array|string
+    {
         return ['score' => $this->scoring];
-	}
+    }
 }

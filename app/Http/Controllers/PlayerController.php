@@ -14,12 +14,12 @@ use Illuminate\Validation\Rule;
 class PlayerController extends Controller
 {
     use IdValidatorUtil;
-    
+
     protected $playersService;
 
     /**
      * A player controller.
-     * 
+     *
      * @param iPlayerService $playersService
      */
     public function __construct(iPlayerService $playersService)
@@ -34,12 +34,11 @@ class PlayerController extends Controller
      */
     public function index()
     {
-        try{
+        try {
             $responseData = $this->playersService->readAll();
 
             return response()->json($responseData);
-        }
-        catch(\Throwable $error){
+        } catch(\Throwable $error) {
             error_log($error);
             $errorResponse = new HttpResponse500();
 
@@ -55,24 +54,23 @@ class PlayerController extends Controller
      */
     public function show(string $id)
     {
-        try{
+        try {
             $id = $this->validateId($id);
 
-            if(empty($id)){
+            if (empty($id)) {
                 $httpResponse = new HttpResponse422();
                 return response()->json($httpResponse->parse(), $httpResponse->getCode());
             }
-    
+
             $dataResponse = $this->playersService->readOne($id);
-    
-            if(empty($dataResponse)){
+
+            if (empty($dataResponse)) {
                 $httpResponse = new HttpResponse404();
                 return response()->json($httpResponse->parse(), $httpResponse->getCode());
             }
-    
+
             return response()->json($dataResponse);
-        }
-        catch(\Throwable $error){
+        } catch(\Throwable $error) {
             error_log($error);
             $errorResponse = new HttpResponse500();
 
@@ -88,35 +86,34 @@ class PlayerController extends Controller
      */
     public function store(Request $request)
     {
-        try{
+        try {
             $validation = $this->validateDtoPlayer($request);
 
             if ($validation->fails()) {
                 $errors = $validation->getMessageBag()->all();
                 $errorResponse = new HttpResponse422();
                 $errorResponse->setMessage($errors);
-    
+
                 return response()->json($errorResponse->parse(), $errorResponse->getCode());
             }
-    
+
             $dataValidated = $validation->validated();
-    
+
             $newPlayer = $this->playersService->create(
                 $dataValidated['name'],
                 (int)$dataValidated['level'],
                 $dataValidated['skills'],
                 $dataValidated['genre']
             );
-    
-            if(empty($newPlayer)){
+
+            if (empty($newPlayer)) {
                 $errorResponse = new HttpResponse500("New player isn't created!");
-    
+
                 return response()->json($errorResponse->parse(), $errorResponse->getCode());
             }
-    
+
             return response()->json(["new_player" => $newPlayer], 200);
-        }
-        catch(\Throwable $error){
+        } catch(\Throwable $error) {
             error_log($error);
             $errorResponse = new HttpResponse500();
 
@@ -132,25 +129,24 @@ class PlayerController extends Controller
      */
     public function destroy(string $id)
     {
-        try{
+        try {
             $id = $this->validateId($id);
 
-            if(empty($id)){
+            if (empty($id)) {
                 $httpResponse = new HttpResponse422();
                 return response()->json($httpResponse->parse(), $httpResponse->getCode());
             }
-    
+
             $dataResponse = $this->playersService->delete($id);
             $codeResponse = 204;
-    
-            if(empty($dataResponse)){
+
+            if (empty($dataResponse)) {
                 $httpResponse = new HttpResponse404();
                 return response()->json($httpResponse->parse(), $httpResponse->getCode());
             }
-    
+
             return response()->json($dataResponse, $codeResponse);
-        }
-        catch(\Throwable $error){
+        } catch(\Throwable $error) {
             error_log($error);
             $errorResponse = new HttpResponse500();
 
@@ -159,13 +155,14 @@ class PlayerController extends Controller
     }
 
     /**
-     * Validate data request for a player. 
+     * Validate data request for a player.
      * Ex.: { "name":"Marolio", "level":100, "skills": { "strength":10, "velocity":"10", "reaction":"10" }, "genre":"male" }
-     * 
+     *
      * @param Request $request
      * @return \Illuminate\Contracts\Validation\Validator|\Illuminate\Validation\Validator
      */
-    protected function validateDtoPlayer(Request $request){
+    protected function validateDtoPlayer(Request $request)
+    {
         return Validator::make(
             $request->all(),
             [

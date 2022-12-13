@@ -11,7 +11,8 @@ class InvalidScoreException extends Exception
 {
     /**
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->message = "Scoring used is not a valid tennis score";
     }
 }

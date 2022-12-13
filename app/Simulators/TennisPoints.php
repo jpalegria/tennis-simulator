@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Simulators;
 
 use App\Exceptions\InvalidScoreException;
@@ -16,14 +17,14 @@ class TennisPoints implements iTennisScoring
      * @param string $current
      * @return string
      */
-    public static function addScore(string $current):string{
-
+    public static function addScore(string $current): string
+    {
         self::validateScoring($current);
 
         $index = array_search($current, self::$scoringTable);
         $score = $current;
 
-        if($index+1 < count(self::$scoringTable)){
+        if ($index+1 < count(self::$scoringTable)) {
             $score = self::$scoringTable[$index+1];
         }
 
@@ -35,28 +36,29 @@ class TennisPoints implements iTennisScoring
      * @param string $current
      * @return string
      */
-    public static function removeScore(string $current):string{
-
+    public static function removeScore(string $current): string
+    {
         self::validateScoring($current);
 
         $index = array_search($current, self::$scoringTable);
         $score = $current;
 
-        if($index-1 >= 0){
+        if ($index-1 >= 0) {
             $score = self::$scoringTable[$index-1];
         }
 
         return $score;
     }
-    
+
     /**
      * Validates the current score exists in scoring table
      * @param mixed $score
-     * @throws InvalidScoreException 
+     * @throws InvalidScoreException
      * @return bool
      */
-    protected static function validateScoring(string $score):bool{
-        if(!in_array($score, self::$scoringTable)){
+    protected static function validateScoring(string $score): bool
+    {
+        if (!in_array($score, self::$scoringTable)) {
             throw new InvalidScoreException();
         }
 

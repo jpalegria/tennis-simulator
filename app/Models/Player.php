@@ -46,5 +46,4 @@ class Player extends Model
             set: fn ($value) => Genre::mutate(strtolower($value))
         );
     }
-
 }
