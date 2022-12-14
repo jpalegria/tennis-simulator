@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->integer('level')->default(1)->unsigned();
             $table->json('skills');
-            $table->boolean('genre', 1)->comment('Genres: male(0), female(1)');
+            $table->boolean('genre')->comment('Genres: male(0), female(1)');
             $table->timestamps();
             $table->softDeletes();
         });
